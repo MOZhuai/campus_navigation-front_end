@@ -1,0 +1,35 @@
+a{
+    text-decoration:none;
+    color: black;
+}
+.nav{
+    display: flex;
+    flex-direction: row;
+    height: 70px;
+    background-color: #96a5ff;
+    font-size: 30px;
+    text-align: center;
+}
+.logo{
+    display: flex;
+    flex: 1;
+    align-items: center;
+    justify-content: center;
+}
+.logo a{
+    font-weight: bold;
+    font-size: 35px;
+}
+.h-list{
+    display: flex;
+    flex: 2;
+    text-align: right;
+    align-items: center;
+    justify-content: space-around;
+}
+.info{
+    display: flex;
+}
+.tbd{
+    padding-top: 20px;
+}

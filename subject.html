@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>校园考场导航系统-科目管理</title>
+    <script src="js/jquery-1.12.4.min.js"></script>
+    <script src="js/index.js"></script>
+    <script src="bootstrap-3.3.7-dist/js/bootstrap.min.js"></script>
+    <link href="bootstrap-3.3.7-dist/css/bootstrap.min.css" rel="stylesheet">
+    <script>
+        $(function () {
+            $('[data-toggle="tooltip"]').tooltip()
+        })
+    </script>
+</head>
+<body>
+<ul class="nav nav-tabs">
+    <li role="presentation"><a href="index.html">首页</a></li>
+    <li role="presentation"><a href="building.html">地图管理</a></li>
+    <li role="presentation"><a href="examinee.html">考生管理</a></li>
+    <li role="presentation" class="active"><a href="#">科目管理</a></li>
+</ul>
+<div>
+    <table id="subject-list" class="table table-bordered">
+        <tr>
+            <th>编号</th>
+            <th>科目代码</th>
+            <th>科目名称</th>
+            <th>考试开始时间</th>
+            <th>考试结束时间</th>
+            <th><button id="insert-subject-position" data-toggle="modal" data-target="#subject-insert-model" class="btn btn-primary btn-xs">添加</button></th>
+        </tr>
+    </table>
+</div>
+<!--考试科目添加考生的模态框-->
+<div class="modal fade" id="insert-examinee-into-subject-model" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+    <div class="modal-dialog  modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times</span></button>
+                <h4 class="modal-title" id="manageLabel">参考考生管理</h4>
+            </div>
+            <div class="modal-body">
+                <form class="form-horizontal">
+                    <div class="form-group">
+                        <label class="col-sm-4 control-label">编号</label>
+                        <div class="col-sm-6">
+                            <input type="text" class="form-control" id="insert-examinee-into-subject-id" disabled>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-4 control-label">名称</label>
+                        <div class="col-sm-6">
+                            <input type="text" class="form-control" id="insert-examinee-into-subject-name" disabled>
+                        </div>
+                    </div>
+                    <div class="form-group" style="overflow-y:scroll; overflow-x:hidden;height: 300px">
+                        <table id="insert-examinee-list" class="table table-bordered">
+                        </table>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+                <button type="button" class="btn btn-primary" data-dismiss="modal" onclick="showInsertExamineeOnSubjectModel()">添加考生</button>
+            </div>
+        </div>
+    </div>
+</div>
+<!--科目添加考生的模态框-->
+<div class="modal fade" id="subject-insert-examinee-model" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close" onclick="reShowSubjectManageModel()"><span aria-hidden="true">&times</span></button>
+                <h4 class="modal-title" id="insert-es-Label">添加参考考生</h4>
+            </div>
+            <div class="modal-body">
+                <form class="form-horizontal">
+                    <div class="form-group">
+                        <label class="col-sm-4 control-label">科目</label>
+                        <div class="col-sm-7">
+                            <input type="text" class="form-control" id="insert-es-subject" disabled>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-4 control-label">准考证号</label>
+                        <div class="col-sm-7">
+                            <input type="text" class="form-control" id="insert-es-eid" autocomplete="off" oninput="insertExamineeInfoChanged()">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-4 control-label">考生姓名</label>
+                        <div class="col-sm-7">
+                            <input type="text" class="form-control" id="insert-es-name" autocomplete="off" oninput="insertExamineeInfoChanged()">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-4 control-label">身份证号</label>
+                        <div class="col-sm-7">
+                            <input type="text" class="form-control" id="insert-es-idcard" autocomplete="off" oninput="insertExamineeInfoChanged()">
+                        </div>
+                    </div>
+                    <div class="form-group" id="etip-show" style="display: none">
+                        <label class="col-sm-4 control-label"></label>
+                        <a class="col-sm-7" id="examinee-tip"></a>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-4 control-label">性别</label>
+                        <div class="col-sm-7">
+                            <select class="form-control" id="insert-es-gender">
+                                <option value="0">男</option>
+                                <option value="1">女</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-4 control-label">楼层</label>
+                        <div class="col-sm-7">
+                            <select class="form-control" id="insert-es-building" onchange="buildingSelectedChanged(this.id)"></select>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-4 control-label">考场</label>
+                        <div class="col-sm-7">
+                            <select class="form-control" id="insert-es-room"></select>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-4 control-label">座位号</label>
+                        <div class="col-sm-7">
+                            <input type="text" class="form-control" id="insert-es-seat">
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal" onclick="reShowSubjectManageModel()">关闭</button>
+                <button type="button" class="btn btn-primary" onclick="insertExamineeIntoSubject()">提交</button>
+            </div>
+        </div>
+    </div>
+</div>
+<!--添加科目的模态框-->
+<div class="modal fade" id="subject-insert-model" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times</span></button>
+                <h4 class="modal-title" id="insertLabel">添加科目</h4>
+            </div>
+            <div class="modal-body">
+                <form class="form-horizontal">
+                    <div class="form-group">
+                        <label class="col-sm-4 control-label">科目代码</label>
+                        <div class="col-sm-6">
+                            <input type="text" class="form-control" id="insert-subject-sid">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-4 control-label">名称</label>
+                        <div class="col-sm-6">
+                            <input type="text" class="form-control" id="insert-subject-name">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-4 control-label">考试日期</label>
+                        <div class="col-sm-6">
+                            <input type="date" max="2050-01-01" class="form-control" id="insert-subject-date">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-4 control-label">开始时间</label>
+                        <div class="col-sm-6">
+                            <input type="time" class="form-control" id="insert-subject-starttime">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-4 control-label">结束时间</label>
+                        <div class="col-sm-6">
+                            <input type="time" class="form-control" id="insert-subject-endtime">
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+                <button type="button" class="btn btn-primary" onclick="insertSubject()">提交</button>
+            </div>
+        </div>
+    </div>
+</div>
+<!--更新科目的模态框-->
+<div class="modal fade" id="subject-update-model" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times</span></button>
+                <h4 class="modal-title" id="updateLabel">更新科目</h4>
+            </div>
+            <div class="modal-body">
+                <form class="form-horizontal">
+                    <div class="form-group">
+                        <label class="col-sm-4 control-label">编号</label>
+                        <div class="col-sm-6">
+                            <input type="text" class="form-control" id="update-subject-id" disabled>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-4 control-label">科目代码</label>
+                        <div class="col-sm-6">
+                            <input type="text" class="form-control" id="update-subject-sid" disabled>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-4 control-label">名称</label>
+                        <div class="col-sm-6">
+                            <input type="text" class="form-control" id="update-subject-name">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-4 control-label">考试日期</label>
+                        <div class="col-sm-6">
+                            <input type="date" max="2050-01-01" class="form-control" id="update-subject-date">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-4 control-label">开始时间</label>
+                        <div class="col-sm-6">
+                            <input type="time" class="form-control" id="update-subject-starttime">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-4 control-label">结束时间</label>
+                        <div class="col-sm-6">
+                            <input type="time" class="form-control" id="update-subject-endtime">
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+                <button type="button" class="btn btn-primary" onclick="updateSubject()">提交</button>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    loadSubjects();
+</script>
+</body>
+</html>

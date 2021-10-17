@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>校园考场导航系统-地图管理</title>
+    <script src="js/jquery-1.12.4.min.js"></script>
+    <script src="js/index.js"></script>
+    <script src="bootstrap-3.3.7-dist/js/bootstrap.min.js"></script>
+    <link href="bootstrap-3.3.7-dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+<ul class="nav nav-tabs">
+    <li role="presentation"><a href="index.html">首页</a></li>
+    <li role="presentation" class="active"><a href="#">地图管理</a></li>
+    <li role="presentation"><a href="examinee.html">考生管理</a></li>
+    <li role="presentation"><a href="subject.html">科目管理</a></li>
+</ul>
+<div>
+    <table id="building-list" class="table table-bordered">
+        <tr>
+            <th>编号</th>
+            <th>地图名称</th>
+            <th>经度</th>
+            <th>纬度</th>
+            <th>操作</th>
+        </tr>
+    </table>
+</div>
+<!--修改坐标的模态框-->
+<div class="modal fade" id="building-update-model" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times</span></button>
+                <h4 class="modal-title" id="insertLabel">更新坐标(<a href="http://api.map.baidu.com/lbsapi/getpoint/index.html" style="font-size: 15px" target="_blank">百度坐标拾取工具</a>)</h4>
+            </div>
+            <div class="modal-body">
+                <form class="form-horizontal">
+                    <div class="form-group">
+                        <label class="col-sm-4 control-label">编号</label>
+                        <div class="col-sm-6">
+                            <input type="number" class="form-control" id="update-building-id" disabled>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-4 control-label">地图名称</label>
+                        <div class="col-sm-6">
+                            <input type="text" class="form-control" id="update-building-name" disabled>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-4 control-label">经度</label>
+                        <div class="col-sm-6">
+                            <input type="number" class="form-control" id="update-building-longitude">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-4 control-label">纬度</label>
+                        <div class="col-sm-6">
+                            <input type="number" class="form-control" id="update-building-latitude">
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+                <button type="button" class="btn btn-primary" onclick="updateBuilding()">提交</button>
+            </div>
+        </div>
+    </div>
+</div>
+<!--查看已录入考场的模态框-->
+<div class="modal fade" id="show-room-model" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times</span></button>
+                <h4 class="modal-title" id="manageLabel">已录入的考场教室</h4>
+            </div>
+            <div class="modal-body">
+                <form class="form-horizontal">
+                    <div class="form-group">
+                        <label class="col-sm-4 control-label">名称</label>
+                        <div class="col-sm-6">
+                            <input type="text" class="form-control" id="show-building-name" disabled>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-4 control-label">考场</label>
+                        <div class="col-sm-6">
+                            <textarea class="form-control" style="resize:none" id="show-rooms" rows="3" disabled></textarea>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    loadBuildings();
+</script>
+</body>
+</html>
